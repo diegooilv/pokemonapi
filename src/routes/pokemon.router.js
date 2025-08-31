@@ -4,7 +4,7 @@ import {
   handleGetAllPokemons,
   handleGetPokemonById,
   handleGetPokemonByName,
-} from "../controllers/PokemonController.js";
+} from "../controllers/pokemonController.js";
 
 const router = Router();
 
