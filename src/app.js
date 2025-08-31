@@ -7,18 +7,13 @@ import { logRequests } from "./middlewares/logRequests.js";
 import { notFound } from "./middlewares/notFound.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { responseLogger } from "./middlewares/responseLogger.js";
+import { conditionalLimiter } from "./middlewares/limiter.js"
 
 const app = express();
 
 app.use(helmet());
 
-const limiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 minutos
-  max: 100, // Limite de 10 requisições por IP
-  message:
-    "Muitas requisições feitas de seu IP. Tente novamente depois de 5 minutos.",
-});
-app.use(limiter);
+app.use(conditionalLimiter);
 
 app.use(cors());
 
