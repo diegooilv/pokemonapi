@@ -1,0 +1,57 @@
+site_name: Docs | Pokedex
+site_description: Documentação interativa da PokéAPI
+site_author: Diego
+site_url: https://seusite.com
+
+docs_dir: docs
+site_dir: ../docs
+
+repo_name: diegooilv/pokemonapi
+repo_url: https://github.com/diegooilv/pokemonapi
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: amber
+  features:
+    - navigation.instant
+    - navigation.expand
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tracking
+    - navigation.depth
+    - toc.integrate
+    - search.highlight
+    - search.suggest
+    - search.share
+    - content.code.copy
+    - content.footnotes
+    - content.emoji
+    - content.tabs.link
+
+nav:
+  - Início: index.md
+  - Pokémon:
+      - Visão Geral: pokemon/index.md
+      - Obter por ID: pokemon/get-by-id.md
+      - Obter por Nome: pokemon/get-by-name.md
+  - Itens:
+      - Visão Geral: item/index.md
+      - Obter por ID: item/get-by-id.md
+      - Obter por Nome: item/get-by-name.md
+  - Movimentos:
+      - Visão Geral: move/index.md
+      - Obter por ID: move/get-by-id.md
+      - Obter por Nome: move/get-by-name.md
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
+  - git-revision-date-localized
+  - mermaid2

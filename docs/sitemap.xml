@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://seusite.com/</loc>
+         <lastmod>2025-08-31</lastmod>
+    </url>
+    <url>
+         <loc>https://seusite.com/pokemon/</loc>
+         <lastmod>2025-08-31</lastmod>
+    </url>
+    <url>
+         <loc>https://seusite.com/pokemon/get-by-id/</loc>
+         <lastmod>2025-08-31</lastmod>
+    </url>
+    <url>
+         <loc>https://seusite.com/pokemon/get-by-name/</loc>
+         <lastmod>2025-08-31</lastmod>
+    </url>
+</urlset>
