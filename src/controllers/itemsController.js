@@ -2,7 +2,7 @@ import {
   getAllItems as fetchAllItems,
   getItemById as fetchItemById,
   getItemByName as fetchItemByName,
-} from "../services/itemsService.js";
+} from "../services/itemService.js";
 
 export const handleGetItemById = (req, res) => {
   const { id } = req;
