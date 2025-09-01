@@ -23,8 +23,8 @@ async function buscarPokemon(valor) {
 
   // decide se é número (id) ou texto (nome)
   const endpoint = isNaN(valor)
-    ? `http://localhost:3000/pokemon/name/${valor.toLowerCase()}`
-    : `http://localhost:3000/pokemon/id/${valor}`;
+    ? `https://dex.diegooilv.xyz/pokemon/name/${valor.toLowerCase()}`
+    : `https://dex.diegooilv.xyz/pokemon/id/${valor}`;
 
   try {
     const res = await fetch(endpoint);
@@ -79,8 +79,8 @@ async function buscarMove(valor) {
   }
 
   const endpoint = isNaN(valor)
-    ? `http://localhost:3000/move/name/${valor.toLowerCase()}`
-    : `http://localhost:3000/move/id/${valor}`;
+    ? `https://dex.diegooilv.xyz/move/name/${valor.toLowerCase()}`
+    : `https://dex.diegooilv.xyz/move/id/${valor}`;
 
   try {
     const res = await fetch(endpoint);
@@ -125,8 +125,8 @@ async function buscarItem(valor) {
   }
 
   const endpoint = isNaN(valor)
-    ? `http://localhost:3000/item/name/${valor.toLowerCase()}`
-    : `http://localhost:3000/item/id/${valor}`;
+    ? `https://dex.diegooilv.xyz/item/name/${valor.toLowerCase()}`
+    : `https://dex.diegooilv.xyz/item/id/${valor}`;
 
   try {
     const res = await fetch(endpoint);
@@ -168,7 +168,7 @@ async function buscarType(valor) {
     return;
   }
 
-  const endpoint = `http://localhost:3000/type/${valor.toLowerCase()}`;
+  const endpoint = `https://dex.diegooilv.xyz/type/${valor.toLowerCase()}`;
 
   try {
     const res = await fetch(endpoint);
