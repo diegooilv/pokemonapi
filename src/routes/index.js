@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { cspMiddleware } from "../middlewares/contentSecurityPolicy.js";
 import imagesRouter from "./images.router.js";
 import pokemonRouter from "./pokemon.router.js";
 import itemRouter from "./item.router.js";
@@ -13,8 +14,8 @@ router.use("/images", imagesRouter);
 router.use("/pokemon", pokemonRouter);
 router.use("/item", itemRouter);
 router.use("/move", moveRouter);
-router.use("/docs", docsRouter);
-router.use("/dex", pokedexRouter);
+router.use("/docs", cspMiddleware, docsRouter);
+router.use("/dex", cspMiddleware, pokedexRouter);
 router.use("/type", typeRouter);
 
 export default router;
