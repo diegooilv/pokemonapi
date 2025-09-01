@@ -177,46 +177,175 @@ footer {
 }
 
 .move-card {
-  text-align: left;
-  padding: 1rem;
-  border-radius: 12px;
-  background: #f9f9f9;
-  border: 3px solid #3b4cca;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  margin-top: 1rem;
+    text-align: left;
+    padding: 1rem;
+    border-radius: 12px;
+    background: #f9f9f9;
+    border: 3px solid #3b4cca;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
 }
 
 .move-card h2 {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
 }
 
 .move-card p {
-  margin: 0.3rem 0;
-  font-size: 0.9rem;
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
 }
 
 .item-card {
-  text-align: left;
-  padding: 1rem;
-  border-radius: 12px;
-  background: #f9f9f9;
-  border: 3px solid #ff9800;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  margin-top: 1rem;
+    text-align: left;
+    padding: 1rem;
+    border-radius: 12px;
+    background: #f9f9f9;
+    border: 3px solid #ff9800;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
 }
 
 .item-card h2 {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
 }
 
 .item-card p {
-  margin: 0.3rem 0;
-  font-size: 0.9rem;
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
 }
 
+.type-card {
+    text-align: left;
+    padding: 1rem;
+    border-radius: 12px;
+    background: #f9f9f9;
+    border: 3px solid #4caf50;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
+}
+
+.type-card h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.type-card h3 {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #2a75bb;
+}
+
+.type-card p {
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
+}
+
+
+#sobre {
+    background: #fff8e1;
+    border: 3px solid #ffcb05;
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem auto;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    max-width: 900px;
+}
+#sobre a {
+  display: inline-block;
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(90deg, #ffcb05, #ff0000);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#sobre a:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+
+#sobre h2 {
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    font-size: 1.4rem;
+    color: #2a75bb;
+    margin-bottom: 1rem;
+}
+
+#sobre p {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.sobre-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-evenly;
+}
+
+.sobre-card {
+  flex: 1 1 220px; 
+  max-width: 250px;
+  background: #f5f5f5;
+  border: 2px solid #2a75bb;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
+}
+
+.sobre-card:hover {
+  transform: scale(1.05);
+}
+
+
+.sobre-card {
+    background: #f5f5f5;
+    border: 2px solid #2a75bb;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s;
+}
+
+.sobre-card:hover {
+    transform: scale(1.05);
+}
+
+.sobre-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #ff0000;
+    text-align: center;
+}
+
+.sobre-card p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.sobre-card ul {
+    font-size: 0.85rem;
+    list-style: none;
+    padding-left: 0;
+}
+
+.sobre-card ul li {
+    margin: 0.3rem 0;
+}
