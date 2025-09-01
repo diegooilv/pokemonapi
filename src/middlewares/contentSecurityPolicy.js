@@ -7,7 +7,7 @@ export function cspMiddleware(req, res, next) {
   // Content Security Policy (permite script do Cloudflare)
   res.setHeader(
     "Content-Security-Policy",
-    `default-src 'self'; script-src 'self' https://static.cloudflareinsights.com https://pokemon.diegooilv.xyz 'nonce-${nonce}'; style-src 'self' https://fonts.googleapis.com https://pokemon.diegooilv.xyz; font-src 'self' https://fonts.gstatic.com https://pokemon.diegooilv.xyz; object-src 'none'; base-uri 'self'; frame-ancestors 'none';`
+    `default-src 'self'; script-src 'self' https://static.cloudflareinsights.com https://pokemon.diegooilv.xyz 'nonce-${nonce}'; style-src 'self' https://fonts.googleapis.com https://pokemon.diegooilv.xyz; font-src 'self' https://fonts.gstatic.com https://pokemon.diegooilv.xyz; img-src 'self' https://pokemon.diegooilv.xyz; object-src 'none'; base-uri 'self'; frame-ancestors 'none';`
   );
 
   // Bloqueia a página de ser carregada em iframes
