@@ -1,4 +1,9 @@
+import crypto from "crypto";
+
 export function cspMiddleware(req, res, next) {
+  const nonce = crypto.randomBytes(16).toString("base64");
+  res.locals.nonce = nonce; 
+
   // Content Security Policy (permite script do Cloudflare)
   res.setHeader(
     "Content-Security-Policy",
