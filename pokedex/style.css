@@ -1,0 +1,222 @@
+/* Fonte pixelada + Roboto */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(180deg, #ffcb05 0%, #ffffff 100%);
+    color: #2a2a2a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Cabeçalho estilo Pokedex */
+header {
+    background: #ef5350;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 6px solid #2a75bb;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+header h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+}
+
+/* Navegação */
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    gap: 0.5rem;
+}
+
+nav button {
+    background: #2a75bb;
+    color: white;
+    border: 2px solid #184d77;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+nav button:hover {
+    background: #3b4cca;
+    transform: scale(1.05);
+}
+
+/* Conteúdo */
+main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 800px;
+    margin: auto;
+}
+
+.section {
+    display: none;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 3px solid #ef5350;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.section.active {
+    display: block;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Inputs */
+label {
+    display: block;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: #2a75bb;
+}
+
+input {
+    padding: 0.6rem;
+    width: 60%;
+    border: 2px solid #2a75bb;
+    border-radius: 8px;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+button.buscar {
+    background: #ffcb05;
+    border: 2px solid #d4a100;
+    color: #2a2a2a;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button.buscar:hover {
+    background: #ffd633;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+    background: #2a75bb;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.8rem;
+    border-top: 6px solid #ef5350;
+    font-family: 'Press Start 2P', cursive;
+}
+
+/* Animação */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pokemon-card {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 12px;
+    background: #f9f9f9;
+    border: 3px solid #2a75bb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
+}
+
+.pokemon-card h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pokemon-card .pokemon-img {
+    max-width: 200px;
+    margin: 1rem 0;
+}
+
+.pokemon-card p {
+    margin: 0.3rem 0;
+}
+
+.stats {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.3rem;
+    margin: 1rem 0;
+}
+
+.stats li {
+    background: #ffcb05;
+    border: 2px solid #d4a100;
+    padding: 0.4rem;
+    border-radius: 6px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+}
+
+.move-card {
+  text-align: left;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #f9f9f9;
+  border: 3px solid #3b4cca;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  margin-top: 1rem;
+}
+
+.move-card h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.move-card p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+
+.item-card {
+  text-align: left;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #f9f9f9;
+  border: 3px solid #ff9800;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  margin-top: 1rem;
+}
+
+.item-card h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.item-card p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+

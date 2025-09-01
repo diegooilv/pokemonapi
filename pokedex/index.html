@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>Pokedex | API DiegoOilv</h1>
+        <nav>
+            <ul>
+                <li><button data-section="item">Item</button></li>
+                <li><button data-section="moves">Moves</button></li>
+                <li><button data-section="pokemon">Pokemon</button></li>
+                <li><button data-section="type">Types</button></li>
+                <li><button data-section="sobre">Sobre</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- ITEM -->
+        <div id="item" class="section">
+            <label for="item-input">Item:</label>
+            <input type="text" id="item-input" name="item">
+            <button class="buscar">Buscar</button>
+            <div id="item-conteudo"></div>
+        </div>
+        <!-- MOVES -->
+        <div id="moves" class="section">
+            <label for="moves-input">Moves:</label>
+            <input type="text" id="moves-input" name="moves">
+            <button class="buscar">Buscar</button>
+            <div id="moves-conteudo"></div>
+        </div>
+        <!-- POKEMON (padrão visível) -->
+        <div id="pokemon" class="section active">
+            <label for="pokemon-input">Pokemon:</label>
+            <input type="text" id="pokemon-input" name="pokemon">
+            <button class="buscar">Buscar</button>
+            <div id="pokemon-conteudo"></div>
+        </div>
+        <!-- TYPES -->
+        <div id="type" class="section">
+            <label for="type-input">Type:</label>
+            <input type="text" id="type-input" name="type">
+            <button class="buscar">Buscar</button>
+            <div id="type-conteudo"></div>
+        </div>
+        <!-- SOBRE -->
+        <div id="sobre" class="section">
+            <h2>Sobre a Pokedex</h2>
+            <p>Este projeto usa a API DiegoOilv para exibir dados do mundo Pokémon.</p>
+        </div>
+    </main>
+    <footer> | dex.diegooilv.xyz API | Pokedex </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>
