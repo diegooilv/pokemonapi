@@ -5,6 +5,7 @@ import itemRouter from "./item.router.js";
 import moveRouter from "./move.router.js";
 import docsRouter from "./docs.router.js";
 import pokedexRouter from "./pokedex.router.js";
+import typeRouter from "./type.router.js";
 
 const router = Router();
 
@@ -14,6 +15,6 @@ router.use("/item", itemRouter);
 router.use("/move", moveRouter);
 router.use("/docs", docsRouter);
 router.use("/dex", pokedexRouter);
-
+router.use("/type", typeRouter);
 
 export default router;
