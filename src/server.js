@@ -1,8 +1,8 @@
-import http from 'http';
-import dotenv from 'dotenv';  
-import app from './app.js';
-
-dotenv.config(); 
+import http from "http";
+import "dotenv/config";
+import app from "./app.js";
+import { fetch } from "undici";
+global.fetch = fetch;
 
 const startServer = async () => {
   try {
@@ -13,7 +13,7 @@ const startServer = async () => {
       console.log(`Servidor rodando na porta ${port}`);
     });
   } catch (error) {
-    console.error('Erro ao conectar ao banco de dados:', error);
+    console.error("Erro ao conectar ao banco de dados:", error);
     process.exit(1);
   }
 };
