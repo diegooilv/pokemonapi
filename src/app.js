@@ -23,9 +23,9 @@ app.use(
 
 app.use(express.json());
 
-app.use(discordLogMiddleware);
-
 app.use(limiterMiddleware);
+
+app.use(discordLogMiddleware);
 
 app.use(responseLogger);
 
