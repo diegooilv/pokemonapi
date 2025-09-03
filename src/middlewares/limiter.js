@@ -27,13 +27,36 @@ const isExemptPath = (req) => {
   return p.startsWith("/docs") || p.startsWith("/dex");
 };
 
+const blockedPaths = [
+  /vendor\/phpunit/i,
+  /\.env$/i,
+  /\.htaccess$/i,
+  /\.bak$/i,
+  /\.zip$/i,
+  /\.tar\.gz$/i,
+  /\.7z$/i,
+  /wwwroot/i,
+  /backup/i,
+  /configs?/i
+];
+
+const isSuspicious = (req) => {
+  const p = req.originalUrl || req.url || "";
+  return blockedPaths.some((rx) => rx.test(p));
+};
+
+const getIp = (req) => {
+  const cf = req.headers && req.headers["cf-connecting-ip"];
+  if (cf) return cf;
+  const xff = req.headers && req.headers["x-forwarded-for"];
+  if (xff) return String(xff).split(",")[0].trim();
+  return req.ip || "";
+};
+
 const createApiLimiter = ({ windowMs, max, ipv6Subnet }) => {
   const keyGenerator = (req) => {
     if (!req) return "";
-    return ipKeyGenerator(
-      req.ip,
-      ipv6Subnet === undefined ? undefined : ipv6Subnet
-    );
+    return ipKeyGenerator(getIp(req), ipv6Subnet === undefined ? undefined : ipv6Subnet);
   };
 
   return rateLimit({
@@ -47,19 +70,19 @@ const createApiLimiter = ({ windowMs, max, ipv6Subnet }) => {
       const log = {
         method: req.method,
         path: req.originalUrl || req.url,
-        ip: req.ip,
+        ip: getIp(req),
         ua: req.headers["user-agent"] || "-",
         time: new Date().toISOString(),
-        reason: "RATE_LIMIT_EXCEEDED",
+        reason: "RATE_LIMIT_EXCEEDED"
       };
-      await logToDiscord(log);
+      try {
+        await logToDiscord(log);
+      } catch (e) {}
       const retryAfterSec = Math.ceil(windowMs / 1000);
       res.set("Retry-After", String(retryAfterSec));
       const status = (options && options.statusCode) || 429;
-      return res
-        .status(status)
-        .json({ error: "Muitas requisições. Tente novamente mais tarde." });
-    },
+      return res.status(status).json({ error: "Muitas requisições. Tente novamente mais tarde." });
+    }
   });
 };
 
@@ -80,15 +103,29 @@ const devKeys = parseDevKeys();
 const apiLimiter = createApiLimiter({
   windowMs: WINDOW_MS,
   max: MAX_REQUESTS,
-  ipv6Subnet: IPV6_SUBNET,
+  ipv6Subnet: IPV6_SUBNET
 });
 
-export default function limiterMiddleware(req, res, next) {
+export default async function limiterMiddleware(req, res, next) {
   if (isExemptPath(req)) return next();
 
   const providedKey = getProvidedKeyFromReq(req);
-
   if (providedKey && devKeys.includes(providedKey)) return next();
+
+  if (isSuspicious(req)) {
+    const log = {
+      method: req.method,
+      path: req.originalUrl || req.url,
+      ip: getIp(req),
+      ua: req.headers["user-agent"] || "-",
+      time: new Date().toISOString(),
+      reason: "SUSPICIOUS_PATH_BLOCKED"
+    };
+    try {
+      await logToDiscord(log);
+    } catch (e) {}
+    return res.status(403).json({ error: "Acesso proibido" });
+  }
 
   return apiLimiter(req, res, next);
 }
