@@ -18,4 +18,8 @@ router.use("/docs", cspMiddleware, docsRouter);
 router.use("/dex", cspMiddleware, pokedexRouter);
 router.use("/type", typeRouter);
 
+router.get("/", (req, res) => {
+  res.redirect("/docs");
+});
+
 export default router;
