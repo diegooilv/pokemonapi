@@ -23,7 +23,7 @@ app.use(
 
 app.use(express.json());
 
-app.use(limiterMiddleware);
+// app.use(limiterMiddleware);
 
 app.use(discordLogMiddleware);
 
