@@ -31,25 +31,29 @@ function short(str, max = 600) {
   return str.length > max ? str.slice(0, max - 3) + "..." : str;
 }
 
-function formatLog(l) {
+function formatPart(label, content, maxLength) {
+  if (!content) return "";
+  return `${label}: \`${short(content, maxLength)}\``;
+}
+
+function formatLogItem(l) {
   const time = l.time;
   const method = l.method || "-";
   const route = l.route || l.path || "-";
   const ip = l.ip || "-";
   const ua = l.ua || "-";
-  const params = short(safeStringify(l.params || {}), 300);
-  const query = short(safeStringify(l.query || {}), 300);
-  const body = short(safeStringify(l.body || {}), 800);
-  const parts = [
+
+  const params = formatPart("🔢 Params", safeStringify(l.params || {}), 300);
+  const query = formatPart("❓ Query", safeStringify(l.query || {}), 300);
+  const body = formatPart("🗂 Body", safeStringify(l.body || {}), 800);
+
+  return [
     `🔔 **[${time}] ${method} ${route}**`,
     `🛰 IP: \`${ip}\` • 🧭 UA: \`${short(ua, 120)}\``,
-    params ? `🔢 Params: \`${params}\`` : "",
-    query ? `❓ Query: \`${query}\`` : "",
-    body ? `🗂 Body: \`${body}\`` : "",
-  ]
-    .filter(Boolean)
-    .join("\n");
-  return parts;
+    params,
+    query,
+    body,
+  ].filter(Boolean).join("\n");
 }
 
 async function fetchWithTimeout(url, opts = {}, timeout = FETCH_TIMEOUT_MS) {
@@ -66,15 +70,7 @@ async function fetchWithTimeout(url, opts = {}, timeout = FETCH_TIMEOUT_MS) {
   }
 }
 
-async function sendToDiscord(content) {
-  console.debug(
-    "[discordLogger] sendToDiscord called, webhook present?",
-    !!WEBHOOK_URL
-  );
-  if (!WEBHOOK_URL) return { ok: false, reason: "no_webhook" };
-  if (!hasFetch) return { ok: false, reason: "no_fetch_available" };
-
-  const body = { content };
+async function trySendToDiscord(body) {
   for (let attempt = 0; attempt <= MAX_SEND_RETRIES; attempt++) {
     try {
       const res = await fetchWithTimeout(WEBHOOK_URL, {
@@ -84,89 +80,79 @@ async function sendToDiscord(content) {
       });
       if (res.status === 429) {
         const json = await res.json().catch(() => ({}));
-        const retryAfter = (json.retry_after || 1) * 1000;
-        console.warn(
-          "[discordLogger] webhook rate limited, retryAfter=",
-          retryAfter
-        );
-        return { ok: false, rateLimited: true, retryAfter };
+        return { ok: false, rateLimited: true, retryAfter: (json.retry_after || 1) * 1000 };
       }
       if (!res.ok) {
         const txt = await res.text().catch(() => "");
-        console.error(
-          `[discordLogger] webhook returned status ${res.status}`,
-          txt
-        );
         return { ok: false, reason: `status_${res.status}`, text: txt };
       }
       return { ok: true };
     } catch (err) {
-      console.error(
-        "[discordLogger] send attempt failed",
-        attempt,
-        String(err)
-      );
-      if (attempt === MAX_SEND_RETRIES)
-        return { ok: false, reason: "network", error: String(err) };
-      await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+      if (attempt === MAX_SEND_RETRIES) return { ok: false, reason: "network", error: String(err) };
+      await new Promise(r => setTimeout(r, 300 * (attempt + 1)));
     }
   }
   return { ok: false, reason: "unknown" };
 }
 
-async function flushBatch(batch) {
-  if (!batch || batch.length === 0) return { ok: true };
-  const blocks = [];
+export async function sendToDiscord(content) {
+  if (!WEBHOOK_URL) return { ok: false, reason: "no_webhook" };
+  if (!hasFetch) return { ok: false, reason: "no_fetch_available" };
+  return trySendToDiscord({ content });
+}
+
+function splitIntoChunks(batch) {
+  const chunks = [];
   let current = "";
   for (const item of batch) {
-    const block = formatLog(item);
+    const block = formatLogItem(item);
     const candidate = current ? `${current}\n\n${block}` : block;
     if (candidate.length > DISCORD_MESSAGE_CHAR_LIMIT) {
       if (current) {
-        blocks.push(current);
+        chunks.push(current);
         current = block;
       } else {
-        blocks.push(block.slice(0, DISCORD_MESSAGE_CHAR_LIMIT - 3) + "...");
+        chunks.push(block.slice(0, DISCORD_MESSAGE_CHAR_LIMIT - 3) + "...");
         current = "";
       }
     } else {
       current = candidate;
     }
   }
-  if (current) blocks.push(current);
+  if (current) chunks.push(current);
+  return chunks;
+}
 
-  for (const chunk of blocks) {
+async function flushBatch(batch) {
+  if (!batch || batch.length === 0) return { ok: true };
+  const chunks = splitIntoChunks(batch);
+
+  for (const chunk of chunks) {
     const res = await sendToDiscord(chunk);
-    if (!res.ok && res.rateLimited) {
-      return { ok: false, retryAfter: res.retryAfter };
-    }
-    if (!res.ok) {
-      return { ok: false, reason: res.reason || res.text || "unknown" };
-    }
+    if (!res.ok && res.rateLimited) return { ok: false, retryAfter: res.retryAfter };
+    if (!res.ok) return { ok: false, reason: res.reason || res.text || "unknown" };
   }
   return { ok: true };
 }
 
 async function sendLogsLoop() {
-  if (sending) return;
-  if (logQueue.length === 0) return;
+  if (sending || logQueue.length === 0) return;
   sending = true;
+
   const batch = logQueue.splice(0, Math.min(MAX_BATCH_SIZE, logQueue.length));
-  console.debug("[discordLogger] attempting flushBatch, size=", batch.length);
   const res = await flushBatch(batch);
+
   if (!res.ok) {
-    console.warn("[discordLogger] flushBatch failed", res);
+    logQueue.unshift(...batch);
     if (res.retryAfter) {
-      logQueue.unshift(...batch);
       setTimeout(() => {
         sending = false;
         sendLogsLoop();
       }, res.retryAfter + 200);
       return;
-    } else {
-      logQueue.unshift(...batch);
     }
   }
+
   sending = false;
 }
 
@@ -174,36 +160,33 @@ setInterval(() => {
   if (logQueue.length > 0) sendLogsLoop();
 }, BATCH_INTERVAL_MS);
 
-// Middleware principal — push na fila, sem bloquear
+function extractRequestData(req) {
+  const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.ip || req.socket?.remoteAddress || "-";
+  const ua = req.headers["user-agent"] || "-";
+  return {
+    method: req.method,
+    route: req.originalUrl || req.url,
+    path: req.path,
+    params: req.params,
+    query: req.query,
+    body: req.body,
+    ip,
+    ua,
+    time: new Date().toISOString(),
+  };
+}
+
 export function discordLogMiddleware(req, res, next) {
   try {
-    const ip =
-      req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
-      req.ip ||
-      req.socket?.remoteAddress ||
-      "-";
-    const ua = req.headers["user-agent"] || "-";
-    const item = {
-      method: req.method,
-      route: req.originalUrl || req.url,
-      path: req.path,
-      params: req.params,
-      query: req.query,
-      body: req.body,
-      ip,
-      ua,
-      time: new Date().toISOString(),
-    };
+    const item = extractRequestData(req);
     if (logQueue.length >= MAX_QUEUE_SIZE) logQueue.shift();
     logQueue.push(item);
-    console.debug("[discordLogger] enqueued log, queueLen=", logQueue.length);
   } catch (e) {
     console.error("[discordLogger] enqueue failed", String(e));
   }
   next();
 }
 
-// Função utilitária para ser usada por outros middlewares
 export async function logToDiscord(item) {
   try {
     const content = `⚠️ **Rate Limit Exceeded**\n[${item.time}] ${item.method} ${item.path}\nIP: ${item.ip}\nUA: ${item.ua}`;
