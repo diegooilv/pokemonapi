@@ -7,6 +7,7 @@ import moveRouter from "./move.router.js";
 import docsRouter from "./docs.router.js";
 import pokedexRouter from "./pokedex.router.js";
 import typeRouter from "./type.router.js";
+import daoRouter from "./dao.router.js";
 
 const router = Router();
 
@@ -21,5 +22,7 @@ router.use("/type", typeRouter);
 router.get("/", (req, res) => {
   res.redirect("/dex");
 });
+
+router.use("/dao", daoRouter);
 
 export default router;
